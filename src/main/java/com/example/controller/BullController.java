@@ -49,19 +49,20 @@ public class BullController {
 	}
 	
 	/* 更新処理  */
-	@PostMapping()
-	@Transactional(readOnly=false)
-	public ModelAndView save(@ModelAttribute("formModel") BullEntity user) {
-		repos.saveAndFlush(user);
-		return new ModelAndView("redirect:users/list");
-	}
+	@PostMapping("/create")
+    @Transactional(readOnly=false)
+    public ModelAndView save(@ModelAttribute("formModel") BullEntity BulletinBoarder) {
+    	BulletinBoarder.setCreateDate(new Date());
+        repos.saveAndFlush(BulletinBoarder);
+        return new ModelAndView("redirect:bbs/list");
+    }
 	
 	/* 削除処理  */
 	@PostMapping("/delete")
 	@Transactional(readOnly=false)
 	public ModelAndView delete(@RequestParam Date createDate) {
 		repos.deleteById(createDate);
-		return new ModelAndView("redirect:users/list");
+		return new ModelAndView("redirect:bbs/list");
 	}
 	
 	/* 詳細画面への遷移  */
@@ -70,7 +71,7 @@ public class BullController {
 		ModelAndView mav = new ModelAndView();
 		BullEntity data = repos.findById(createDate);
 		mav.addObject("formModel", data);
-		mav.setViewName("bull/new");
+		mav.setViewName("bbs/new");
 		return mav;
 	}
 }
